@@ -9,6 +9,7 @@
   <p><a href="README.md">English</a> · <a href="README.zh-CN.md">简体中文</a></p>
   <p>
     <a href="https://github.com/IceyWu/ageha-go/actions/workflows/ci.yml"><img src="https://github.com/IceyWu/ageha-go/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"></a>
+    <a href="https://pkg.go.dev/github.com/IceyWu/ageha-go"><img src="https://pkg.go.dev/badge/github.com/IceyWu/ageha-go.svg" alt="Go Reference"></a>
     <img src="https://img.shields.io/badge/Go-1.26%2B-00ADD8?style=flat-square&amp;logo=go&amp;logoColor=white" alt="Go 1.26+">
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-555555?style=flat-square" alt="MIT license"></a>
   </p>
@@ -20,8 +21,7 @@ Ageha 是由 **Lev Wu** 开发的 Go 工具包。
 
 ## 安装
 
-这是一个私有 Go 模块。先通过有仓库权限的账号完成 Git 认证，
-并在 `GOPRIVATE` 中加入 `github.com/IceyWu/ageha-go`（保留已有规则）。
+Ageha 可通过公共 Go 模块代理安装，无需 GitHub 登录或配置 `GOPRIVATE`。
 
 ```bash
 go get github.com/IceyWu/ageha-go@v0.0.1

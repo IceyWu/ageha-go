@@ -1,7 +1,6 @@
 """Verify Ageha from a separate module, using a local source or a released Git tag."""
 
 import argparse
-import base64
 import json
 import os
 from pathlib import Path
@@ -25,20 +24,10 @@ def main() -> None:
         env = os.environ.copy()
         env.update({
             "GOWORK": "off", "GOENV": "off", "GOTOOLCHAIN": "local",
-            "GOPROXY": "direct", "GOPRIVATE": MODULE, "GONOSUMDB": MODULE,
-            "GONOPROXY": MODULE, "GOMODCACHE": str(consumer / "mod-cache"),
+            "GOPROXY": "https://proxy.golang.org", "GOPRIVATE": "", "GONOSUMDB": "",
+            "GONOPROXY": "", "GOSUMDB": "sum.golang.org", "GOMODCACHE": str(consumer / "mod-cache"),
             "GOCACHE": str(consumer / "build-cache"), "GIT_TERMINAL_PROMPT": "0",
         })
-        token = env.get("GH_TOKEN")
-        if token:
-            # Ephemeral subprocess configuration; never write credentials to disk.
-            authorization = base64.b64encode(f"x-access-token:{token}".encode()).decode()
-            env.update({
-                "GIT_CONFIG_COUNT": "1",
-                "GIT_CONFIG_KEY_0": "http.https://github.com/.extraheader",
-                "GIT_CONFIG_VALUE_0": f"AUTHORIZATION: basic {authorization}",
-            })
-
         def go(*arguments: str, capture: bool = False) -> str:
             result = subprocess.run(["go", *arguments], cwd=consumer, env=env,
                                     check=True, text=True, encoding="utf-8",
@@ -69,7 +58,7 @@ def main() -> None:
             assert Path(metadata["Dir"]).is_relative_to(consumer / "mod-cache")
             assert metadata["Sum"].startswith("h1:")
         print(json.dumps({"module": MODULE, "version": metadata["Version"],
-                          "source": "Git tag" if args.version else "local replacement",
+                          "source": "official Go proxy" if args.version else "local replacement",
                           "checksum": metadata.get("Sum"), "status": "PASSED"}))
 
 

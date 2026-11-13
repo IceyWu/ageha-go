@@ -1,6 +1,6 @@
 # Publishing
 
-Ageha is a private Go module, `github.com/IceyWu/ageha-go`, containing package `ageha`.
+Ageha is a public Go module, `github.com/IceyWu/ageha-go`, containing package `ageha`.
 Go module identity is its import path; there is no global bare-name reservation for `ageha`.
 Go publishes library versions as Git tags, not as uploads to a separate registry.
 
@@ -10,7 +10,7 @@ Go publishes library versions as Git tags, not as uploads to a separate registry
 2. Push/merge to `main`. CI checks Go 1.26.0 and latest stable on Linux, and stable on Windows.
 3. Release Please's Go strategy updates `version.go`, the manifest and changelog in a version PR.
 4. Review and merge the version PR. CI creates `vX.Y.Z` and a GitHub Release.
-5. In the same workflow, CI downloads that exact private module into an empty module cache,
+5. In the same workflow, CI downloads that exact public module into an empty module cache,
    compiles/runs an independent consumer, checks the version and module source, and verifies module checksums.
 
 There is no local publish command. All release tags are created by CI. The first release is
@@ -18,23 +18,22 @@ There is no local publish command. All release tags are created by CI. The first
 Bot-created version PRs are checked explicitly through reusable CI, since ordinary PR workflows
 may require approval or not automatically run when created with `GITHUB_TOKEN`.
 
-The built-in `GITHUB_TOKEN` is sufficient for this repository's CI to create releases and read
-the private module. Consumer verification passes credentials only through temporary subprocess
-environment configuration, never through a persisted credential URL or file.
+The built-in `GITHUB_TOKEN` lets CI create version PRs and GitHub Releases.
+Installation verification uses the official public proxy (`proxy.golang.org`) and checksum
+service (`sum.golang.org`), without GitHub credentials. Downloading through the official
+proxy submits new versions to the Go module index, which pkg.go.dev monitors.
 
-## Installing a private module
-
-Use a GitHub account with read access. Configure Git authentication with GitHub CLI (`gh auth setup-git`)
-or your own SSH/credential setup. Add `github.com/IceyWu/ageha-go` to `GOPRIVATE`, preserving
-any existing patterns. This avoids sending private module requests to public proxies and checksum services.
+## Installing a public module
 
 ```bash
 go get github.com/IceyWu/ageha-go@v0.0.1
 ```
 
-The repository remains private, so unauthenticated users cannot install it and pkg.go.dev/public
-module proxies cannot index it. Publishing for unrestricted public use would require making
-the source available publicly (or operating a suitable separate public module distribution).
+No GitHub authentication or `GOPRIVATE` rule is needed. If you previously added this module
+(or a broad owner pattern) to `GOPRIVATE`, adjust that pattern for normal public proxy use.
+The repository is public so pkg.go.dev can index its source and documentation.
+Search indexing can lag behind successful proxy downloads; check the exact package page
+before assuming a missing search result means publishing failed.
 
 ## Validation and recovery
 

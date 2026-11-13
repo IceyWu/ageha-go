@@ -9,6 +9,7 @@
   <p><a href="README.md">English</a> · <a href="README.zh-CN.md">简体中文</a></p>
   <p>
     <a href="https://github.com/IceyWu/ageha-go/actions/workflows/ci.yml"><img src="https://github.com/IceyWu/ageha-go/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"></a>
+    <a href="https://pkg.go.dev/github.com/IceyWu/ageha-go"><img src="https://pkg.go.dev/badge/github.com/IceyWu/ageha-go.svg" alt="Go Reference"></a>
     <img src="https://img.shields.io/badge/Go-1.26%2B-00ADD8?style=flat-square&amp;logo=go&amp;logoColor=white" alt="Go 1.26+">
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-555555?style=flat-square" alt="MIT license"></a>
   </p>
@@ -20,8 +21,7 @@ Ageha is a Go toolkit by **Lev Wu**.
 
 ## Installation
 
-This is a private Go module. Authenticate Git with an account that can access this repository,
-and include `github.com/IceyWu/ageha-go` in `GOPRIVATE` (preserve any existing patterns).
+Ageha is available through the public Go module proxy. No GitHub authentication is required.
 
 ```bash
 go get github.com/IceyWu/ageha-go@v0.0.1

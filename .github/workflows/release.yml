@@ -44,10 +44,9 @@ jobs:
         if: steps.release.outputs.release_created == 'true'
         with:
           python-version: '3.13'
-      - name: Install and verify released private module
+      - name: Install and verify released public module
         if: steps.release.outputs.release_created == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_TAG: ${{ steps.release.outputs.tag_name }}
         run: python scripts/verify-consumer.py --version "$RELEASE_TAG"
 
