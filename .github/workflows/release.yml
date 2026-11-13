@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: release-main
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    uses: ./.github/workflows/ci.yml
+
+  release:
+    needs: check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      pr: ${{ steps.release.outputs.pr }}
+    steps:
+      - uses: googleapis/release-please-action@v5.0.0
+        id: release
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+      - uses: actions/checkout@v7.0.1
+        if: steps.release.outputs.release_created == 'true'
+        with:
+          ref: ${{ steps.release.outputs.tag_name }}
+          persist-credentials: false
+      - uses: actions/setup-go@v7.0.0
+        if: steps.release.outputs.release_created == 'true'
+        with:
+          go-version: stable
+          cache: false
+      - uses: actions/setup-python@v7.1.0
+        if: steps.release.outputs.release_created == 'true'
+        with:
+          python-version: '3.13'
+      - name: Install and verify released private module
+        if: steps.release.outputs.release_created == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag_name }}
+        run: python scripts/verify-consumer.py --version "$RELEASE_TAG"
+
+  version-pr-check:
+    needs: release
+    if: needs.release.outputs.pr != '' && needs.release.outputs.pr != 'null'
+    uses: ./.github/workflows/ci.yml
+    with:
+      ref: refs/pull/${{ fromJSON(needs.release.outputs.pr).number }}/head

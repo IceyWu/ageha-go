@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            go: '1.26.0'
+          - os: ubuntu-latest
+            go: stable
+          - os: windows-latest
+            go: stable
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+      - uses: actions/setup-go@v7.0.0
+        with:
+          go-version: ${{ matrix.go }}
+          cache: false
+      - uses: actions/setup-python@v7.1.0
+        with:
+          python-version: '3.13'
+      - name: Check formatting
+        shell: bash
+        run: test -z "$(gofmt -l *.go)"
+      - run: go mod tidy
+      - run: git diff --exit-code -- go.mod go.sum
+      - run: go vet ./...
+      - run: go test -count=1 ./...
+      - run: go build ./...
+      - run: python scripts/verify-consumer.py
