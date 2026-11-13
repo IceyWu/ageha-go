@@ -6,12 +6,12 @@
   <h1>Ageha</h1>
   <p><strong>一个 Go 工具包。</strong></p>
   <p>由 Lev Wu 创建与维护。</p>
-  <p><a href="README.md">English</a> · <a href="README.zh-CN.md">简体中文</a></p>
+  <p><a href="https://github.com/IceyWu/ageha-go/blob/main/README.md">English</a> · <a href="https://github.com/IceyWu/ageha-go/blob/main/README.zh-CN.md">简体中文</a></p>
   <p>
     <a href="https://github.com/IceyWu/ageha-go/actions/workflows/ci.yml"><img src="https://github.com/IceyWu/ageha-go/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"></a>
     <a href="https://pkg.go.dev/github.com/IceyWu/ageha-go"><img src="https://pkg.go.dev/badge/github.com/IceyWu/ageha-go.svg" alt="Go Reference"></a>
     <img src="https://img.shields.io/badge/Go-1.26%2B-00ADD8?style=flat-square&amp;logo=go&amp;logoColor=white" alt="Go 1.26+">
-    <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-555555?style=flat-square" alt="MIT license"></a>
+    <a href="https://github.com/IceyWu/ageha-go/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-555555?style=flat-square" alt="MIT license"></a>
   </p>
 </div>
 
